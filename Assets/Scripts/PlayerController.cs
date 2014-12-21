@@ -22,6 +22,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update () {
+		if (playerPhysics.movementStopped) {
+			targetSpeed = 0;
+			currentSpeed = 0;
+		}
+
 		targetSpeed = Input.GetAxisRaw("Horizontal") *speed;
 		currentSpeed = IncrementPlayerSpeed();
 
@@ -32,7 +37,6 @@ public class PlayerController : MonoBehaviour {
 				amountToMove.y = jumpHeight;
 			}
 		}
-
 
 		amountToMove.x = currentSpeed;
 		amountToMove.y -= gravity * Time.deltaTime;
