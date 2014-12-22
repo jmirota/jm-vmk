@@ -33,7 +33,7 @@ public class PlayerPhysics : MonoBehaviour {
 		float deltaX = moveAmount.x;
 		Vector2 position = transform.position;
 		
-
+		
 		grounded = false;
 		// Check collisions above and below
 		for (int i = 0; i<3; i ++) {
@@ -72,6 +72,17 @@ public class PlayerPhysics : MonoBehaviour {
 				movementStopped = true;
 				break;
 				
+			}
+		}
+		
+		if (!grounded && !movementStopped) {
+			Vector3 playerDircetion = new Vector3(deltaX, deltaY);
+			Vector3 origin = new Vector3(position.x + center.x + size.x/2 * Mathf.Sign (deltaX),position.y + center.y + size.y/2 * Mathf.Sign(deltaY));
+			ray = new Ray(origin, playerDircetion.normalized);
+			
+			if(Physics.Raycast(ray, Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY), collisionMask)) {
+				grounded = true;
+				deltaY = 0;
 			}
 		}
 		
