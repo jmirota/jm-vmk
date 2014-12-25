@@ -10,8 +10,15 @@ public class PlayerPhysics : MonoBehaviour {
 	private BoxCollider collider;
 	private Vector3 size;
 	private Vector3 center;
+
+	private Vector3 originalSize;
+	private Vector3 originalCentre;
+	private float colliderScale;
 	
 	private float skin = .005f;
+
+	private int collisionDivisionsX = 3;
+	private int collisionDivisionsY = 10;
 	
 	[HideInInspector]
 	public bool grounded;
@@ -23,8 +30,12 @@ public class PlayerPhysics : MonoBehaviour {
 	
 	void Start() {
 		collider = GetComponent<BoxCollider>();
+		colliderScale = transform.localScale.x;
+		originalSize = collider.size;
+		originalCentre = collider.center;
 		size = collider.size;
 		center = collider.center;
+		SetCollider(originalSize, originalCentre);
 	}
 	
 	public void Move(Vector2 moveAmount) {
@@ -36,9 +47,9 @@ public class PlayerPhysics : MonoBehaviour {
 		
 		grounded = false;
 		// Check collisions above and below
-		for (int i = 0; i<3; i ++) {
+		for (int i = 0; i<collisionDivisionsX; i ++) {
 			float dir = Mathf.Sign(deltaY);
-			float x = (position.x + center.x - size.x/2) + size.x/2 * i; // Left, centre and then rightmost point of collider
+			float x = (position.x + center.x - size.x/2) + size.x/(collisionDivisionsX-1) * i; // Left, centre and then rightmost point of collider
 			float y = position.y + center.y + size.y/2 * dir; // Bottom of collider
 			
 			ray = new Ray(new Vector2(x,y), new Vector2(0,dir));
@@ -57,10 +68,10 @@ public class PlayerPhysics : MonoBehaviour {
 		}
 		movementStopped = false;
 		// Check collisions left and right
-		for (int i = 0; i<3; i ++) {
+		for (int i = 0; i<collisionDivisionsY; i ++) {
 			float dir = Mathf.Sign(deltaX);
 			float x = position.x + center.x + size.x/2 * dir; // Left, centre and then rightmost point of collider
-			float y = position.y + center.y - size.y/2 + size.y/2 *i; // Bottom of collider
+			float y = position.y + center.y - size.y/2 + size.y/(collisionDivisionsY-1) *i; // Bottom of collider
 			
 			ray = new Ray(new Vector2(x,y), new Vector2(dir,0));
 			if (Physics.Raycast(ray,out hit,Mathf.Abs(deltaX) + skin,collisionMask)) {
@@ -85,11 +96,19 @@ public class PlayerPhysics : MonoBehaviour {
 				deltaY = 0;
 			}
 		}
-		
-		
+            
+				
 		Vector2 finalTransform = new Vector2(deltaX,deltaY);
 		
-		transform.Translate(finalTransform);
+		transform.Translate(finalTransform, Space.World);
 	}
-	
+
+	public void SetCollider(Vector3 originSize, Vector3 originCentre) {
+		collider.size = originSize;
+		collider.center = originCentre;
+
+		size = size * colliderScale;
+		center = originCentre * colliderScale;
+	}
+
 }
