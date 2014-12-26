@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 
-	float speed = 0.11f;
+	float speed = 0.2f;
 	private Vector2 amountToMove;
 	private float direction; // -1 - left 1 - right
 

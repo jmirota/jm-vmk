@@ -24,11 +24,15 @@ public class PlayerController : Entity {
 
 	private PlayerPhysics playerPhysics;
 	private Animator animator;
+	private GameManager manager;
+
+
 	private int direction = 1;
 
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animator = GetComponent<Animator>();
+		manager = Camera.main.GetComponent<GameManager>();
 	}
 
 	void Update () {
@@ -87,4 +91,16 @@ public class PlayerController : Entity {
 			return (direction == Mathf.Sign (targetSpeed - current)) ? current: target;
 		}
 	}
+
+	void OnTriggerEnter(Collider collider) {
+		if (collider.tag == "FirstAid") {
+			Debug.Log("Potion!");
+		} else if (collider.tag == "Checkpoint") {
+			manager.SetCheckpoint(collider.transform.position);
+			Debug.Log("Checkpoint!");
+		} else if (collider.tag == "Finish") {
+			manager.EndLevel();
+		}
+	}
+
 }
