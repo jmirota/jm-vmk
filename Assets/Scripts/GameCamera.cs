@@ -7,7 +7,7 @@ public class GameCamera : MonoBehaviour {
 
 	public void SetTarget(Transform newTransform) {
 		target = newTransform;
-		transform.position = new Vector3(newTransform.position.x, newTransform.position.y, -10);
+		transform.position = new Vector3(newTransform.position.x, 2.5f, -10);
 	}
 
 	void LateUpdate() {

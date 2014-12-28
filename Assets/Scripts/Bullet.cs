@@ -8,7 +8,6 @@ public class Bullet : MonoBehaviour {
 	private float direction; // -1 - left 1 - right
 
 	public void Shoot(float dir) {
-		Debug.Log(dir);
 		direction = dir;
 	}
 
@@ -23,8 +22,16 @@ public class Bullet : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Player") {
-			collider.GetComponent<Entity>().TakeDamage(1);
+			PlayerController playerController = collider.GetComponent<PlayerController>();
+			playerController.TakeDamage(1);
+			playerController.UpdateHealth();
+			Destroy(this.gameObject);
+		} else if (collider.tag == "Enemy") {
 			Destroy(this.gameObject);
 		}
+	}
+
+	void OnBecameInvisible() {
+		Destroy(this.gameObject);
 	}
 }

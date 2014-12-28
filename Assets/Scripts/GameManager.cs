@@ -6,14 +6,18 @@ public class GameManager : MonoBehaviour {
 	public GameObject player;
 	private GameCamera gameCamera;
 	private GameObject currentPlayer;
+	public GameObject HUDCanvas;
 	public Vector3 checkpoint;
 
 	public static int levelCount = 2;
 	public static int currentLevel = 1;
 
+	private HUDCanvasController canvasController;
+
 	// Use this for initialization
 	void Start () {
 		gameCamera = GetComponent<GameCamera>();
+		canvasController = HUDCanvas.GetComponent<HUDCanvasController>();
 		if(GameObject.FindGameObjectWithTag("Spawn")) {
 			checkpoint = GameObject.FindGameObjectWithTag("Spawn").transform.position;
 		}
@@ -44,5 +48,9 @@ public class GameManager : MonoBehaviour {
 
 	public void SetCheckpoint(Vector3 newCheckpoint) {
 		checkpoint = newCheckpoint;
+	}
+
+	public void SetLives(int lives) {
+		canvasController.SetLives(lives);
 	}
 }

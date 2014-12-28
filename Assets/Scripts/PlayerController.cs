@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerPhysics))]
@@ -6,7 +7,6 @@ public class PlayerController : Entity {
 
 	public Bullet bullet;
 	public GameObject spawnPoint;
-
 
 	// Player handling
 	public float gravity = 20;
@@ -26,13 +26,13 @@ public class PlayerController : Entity {
 	private Animator animator;
 	private GameManager manager;
 
-
 	private int direction = 1;
 
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animator = GetComponent<Animator>();
 		manager = Camera.main.GetComponent<GameManager>();
+		manager.SetLives(health);
 	}
 
 	void Update () {
@@ -77,8 +77,9 @@ public class PlayerController : Entity {
 		//Shot
 		if(Input.GetButtonDown("Fire")) {
 			Vector3 spawnPosition = spawnPoint.transform.position;
-			bullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);
-			bullet.Shoot(direction);
+			Bullet firedBullet;
+			firedBullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);
+			firedBullet.Shoot(direction);
 		}
 	}
 
@@ -92,14 +93,24 @@ public class PlayerController : Entity {
 		}
 	}
 
+	public void UpdateHealth() {
+		health++;
+		if (health >=3) {
+			health = 3;
+		} 
+		manager.SetLives(health);
+	}
+		
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "FirstAid") {
-			Debug.Log("Potion!");
+			UpdateHealth();
 		} else if (collider.tag == "Checkpoint") {
 			manager.SetCheckpoint(collider.transform.position);
-			Debug.Log("Checkpoint!");
 		} else if (collider.tag == "Finish") {
 			manager.EndLevel();
+		} else if (collider.tag == "Enemy") {
+			TakeDamage(1);
+			UpdateHealth();
 		}
 	}
 
