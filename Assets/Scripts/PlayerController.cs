@@ -5,9 +5,11 @@ using System.Collections;
 [RequireComponent(typeof(PlayerPhysics))]
 public class PlayerController : Entity {
 
-	public Bullet bullet;
-	public GameObject spawnPoint;
-
+	public GameObject gunPlaceHolder;
+	public GameObject pistol;
+	public GameObject submachinegun;
+	public GameObject machinegun;
+	private GameObject carriedGun;
 	// Player handling
 	public float gravity = 20;
 	public float runSpeed = 3;
@@ -25,14 +27,19 @@ public class PlayerController : Entity {
 	private PlayerPhysics playerPhysics;
 	private Animator animator;
 	private GameManager manager;
+	private GunController gunController;
 
-	private int direction = 1;
+	private int direction = -1;
+
 
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animator = GetComponent<Animator>();
 		manager = Camera.main.GetComponent<GameManager>();
 		manager.SetLives(health);
+		carriedGun = Instantiate(pistol, gunPlaceHolder.transform.position, Quaternion.Euler(new Vector3(0,-90,0))) as GameObject;
+		gunController = carriedGun.GetComponent<PistolController>();
+		carriedGun.transform.parent = this.gameObject.transform;
 	}
 
 	void Update () {
@@ -76,10 +83,7 @@ public class PlayerController : Entity {
 
 		//Shot
 		if(Input.GetButtonDown("Fire")) {
-			Vector3 spawnPosition = spawnPoint.transform.position;
-			Bullet firedBullet;
-			firedBullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);
-			firedBullet.Shoot(direction);
+			gunController.Shoot(direction, "PlayerBullet");
 		}
 	}
 
@@ -100,18 +104,73 @@ public class PlayerController : Entity {
 		} 
 		manager.SetLives(health);
 	}
+
+	private void PickUpPistol(GameObject Pistol) {
+		if(carriedGun.tag != "Pistol"){
+			Destroy(carriedGun);
+			carriedGun = Pistol;
+			gunController = carriedGun.GetComponent<PistolController>();
+			carriedGun.transform.position = gunPlaceHolder.transform.position;
+
+			carriedGun.transform.parent = this.gameObject.transform;
+		}
+	}
+
+	private void PickUpSubmachinegun(GameObject Submachinegun) {
+		if(carriedGun.tag != "Submachinegun"){
+			Destroy(carriedGun);
+			carriedGun = Submachinegun;
+			gunController = carriedGun.GetComponent<SubmachinegunController>();
+			carriedGun.transform.position = gunPlaceHolder.transform.position;
+			carriedGun.transform.parent = this.gameObject.transform;
+		} else {
+			gunController.AddAmmo(10);
+			Destroy(Submachinegun);
+		}
+	}
+	
+	private void PickUpMachinegun(GameObject Machinegun) {
+		if(carriedGun.tag != "Machinegun"){
+			Destroy(carriedGun);
+			carriedGun = Machinegun;
+			gunController = carriedGun.GetComponent<MachinegunController>();
+			carriedGun.transform.position = gunPlaceHolder.transform.position;
+			carriedGun.transform.parent = this.gameObject.transform;
+		} else {
+			gunController.AddAmmo(20);
+			Destroy(Machinegun);
+		}
+	}
 		
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "FirstAid") {
-			UpdateHealth();
+			health++;
+			manager.SetLives(health);
 		} else if (collider.tag == "Checkpoint") {
 			manager.SetCheckpoint(collider.transform.position);
 		} else if (collider.tag == "Finish") {
 			manager.EndLevel();
-		} else if (collider.tag == "Enemy") {
+		} else if (collider.tag == "EnemyBullet") {
 			TakeDamage(1);
-			UpdateHealth();
+		} else if (collider.tag == "Pistol") {
+			PickUpPistol(collider.gameObject);
+		} else if (collider.tag == "Submachinegun") {
+			PickUpSubmachinegun(collider.gameObject);
+		} else if (collider.tag == "Machinegun") {
+			PickUpMachinegun(collider.gameObject);
 		}
+	}
+
+	public override void TakeDamage(int damage) {
+		health--;
+		manager.SetLives(health);
+		if (health <= 0) {
+			Die();
+		}
+	}
+	
+	public override void Die() {
+		Destroy(this.gameObject);
 	}
 
 }

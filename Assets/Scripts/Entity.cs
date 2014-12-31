@@ -3,18 +3,12 @@ using System.Collections;
 
 public class Entity : MonoBehaviour {
 
-	public int health;
+	protected static int health = 1;
 
-	public void TakeDamage(int damage) {
-		health -= damage;
-
-		if (health <= 0) {
-			Die();
-		}
+	public virtual void TakeDamage(int damage) {
 	}
 
-	public void Die() {
-		Destroy(this.gameObject);
+	public virtual void Die() {
 	}
 
 }

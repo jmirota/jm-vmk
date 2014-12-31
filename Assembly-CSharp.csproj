@@ -53,9 +53,13 @@
      <Compile Include="Assets\Scripts\FirstAid.cs" />
      <Compile Include="Assets\Scripts\GameCamera.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\GunController.cs" />
      <Compile Include="Assets\Scripts\HUDCanvasController.cs" />
+     <Compile Include="Assets\Scripts\MachinegunController.cs" />
+     <Compile Include="Assets\Scripts\PistolController.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PlayerPhysics.cs" />
+     <Compile Include="Assets\Scripts\SubmachinegunController.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>

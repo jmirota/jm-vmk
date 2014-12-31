@@ -11,6 +11,7 @@ public class HUDCanvasController : MonoBehaviour {
 	
 	public void SetLives(int updatedLives) {
 		lives = updatedLives;
+		Debug.Log(lives);
 		UpdateLivesImages();
 	}
 

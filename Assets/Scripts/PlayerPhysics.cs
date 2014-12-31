@@ -7,7 +7,7 @@ public class PlayerPhysics : MonoBehaviour {
 	
 	public LayerMask collisionMask;
 	
-	private BoxCollider collider;
+	private new BoxCollider collider;
 	private Vector3 size;
 	private Vector3 center;
 
