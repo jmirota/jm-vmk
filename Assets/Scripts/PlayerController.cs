@@ -31,7 +31,6 @@ public class PlayerController : Entity {
 
 	private int direction = -1;
 
-
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animator = GetComponent<Animator>();
@@ -40,6 +39,7 @@ public class PlayerController : Entity {
 		carriedGun = Instantiate(pistol, gunPlaceHolder.transform.position, Quaternion.Euler(new Vector3(0,-90,0))) as GameObject;
 		gunController = carriedGun.GetComponent<PistolController>();
 		carriedGun.transform.parent = this.gameObject.transform;
+		gunController.isPickUp = true;
 	}
 
 	void Update () {
@@ -85,6 +85,8 @@ public class PlayerController : Entity {
 		if(Input.GetButtonDown("Fire")) {
 			gunController.Shoot(direction, "PlayerBullet");
 		}
+
+		manager.SetAmmoText(gunController.Ammo(), gunController.Magazines());
 	}
 
 	private float IncrementTowards(float current, float target, float acceleration) {
@@ -110,9 +112,10 @@ public class PlayerController : Entity {
 			Destroy(carriedGun);
 			carriedGun = Pistol;
 			gunController = carriedGun.GetComponent<PistolController>();
-			carriedGun.transform.position = gunPlaceHolder.transform.position;
-
-			carriedGun.transform.parent = this.gameObject.transform;
+			gunController.isPickUp = true;
+			SetGunTransform();
+		} else {
+			Destroy(Pistol);
 		}
 	}
 
@@ -121,8 +124,8 @@ public class PlayerController : Entity {
 			Destroy(carriedGun);
 			carriedGun = Submachinegun;
 			gunController = carriedGun.GetComponent<SubmachinegunController>();
-			carriedGun.transform.position = gunPlaceHolder.transform.position;
-			carriedGun.transform.parent = this.gameObject.transform;
+			gunController.isPickUp = true;
+			SetGunTransform();
 		} else {
 			gunController.AddAmmo(10);
 			Destroy(Submachinegun);
@@ -134,14 +137,20 @@ public class PlayerController : Entity {
 			Destroy(carriedGun);
 			carriedGun = Machinegun;
 			gunController = carriedGun.GetComponent<MachinegunController>();
-			carriedGun.transform.position = gunPlaceHolder.transform.position;
-			carriedGun.transform.parent = this.gameObject.transform;
+			gunController.isPickUp = true;
+			SetGunTransform();
 		} else {
 			gunController.AddAmmo(20);
 			Destroy(Machinegun);
 		}
 	}
 		
+	private void SetGunTransform() {
+		carriedGun.transform.position = gunPlaceHolder.transform.position;
+		carriedGun.transform.parent = this.gameObject.transform;
+		carriedGun.transform.rotation = direction == 1 ? Quaternion.Euler(0,90,0): Quaternion.Euler(0, -90, 0);
+	}
+
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "FirstAid") {
 			health++;

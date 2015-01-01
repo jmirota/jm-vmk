@@ -7,12 +7,16 @@ public class GameManager : MonoBehaviour {
 	private GameCamera gameCamera;
 	private GameObject currentPlayer;
 	public GameObject HUDCanvas;
+	public GameObject pistol;
+	public GameObject submachinegun;
+	public GameObject machinegun;
 	public Vector3 checkpoint;
 
 	public static int levelCount = 2;
 	public static int currentLevel = 1;
 
 	private HUDCanvasController canvasController;
+	private GameObject[] guns;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +26,7 @@ public class GameManager : MonoBehaviour {
 			checkpoint = GameObject.FindGameObjectWithTag("Spawn").transform.position;
 		}
 		SpawnPlayer(checkpoint);
+		guns = new GameObject[]{ pistol, submachinegun, machinegun};
 	}
 	
 	private void SpawnPlayer(Vector3 spawnPosition) {
@@ -52,5 +57,13 @@ public class GameManager : MonoBehaviour {
 
 	public void SetLives(int lives) {
 		canvasController.SetLives(lives);
+	}
+
+	public void SpawnGun(int gunType, Vector3 position) {
+		GameObject gun = Instantiate(guns[gunType], position, Quaternion.Euler(new Vector3(0,90,0))) as GameObject;
+	}
+
+	public void SetAmmoText(int ammo, int magazines){
+		canvasController.SetAmmoText(ammo, magazines);
 	}
 }

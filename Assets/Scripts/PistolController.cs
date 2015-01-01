@@ -10,20 +10,13 @@ public class PistolController : GunController {
 		magazines = -1; // Inf
 		reloadingTime = 5; // seconds
 		lastShootTime = 0;
-		shootTimeInterval = 3;
+		shootTimeInterval = 2.1f;
 		isReloading = false;
-	}
-	
-	void Update() {
-		if(isReloading) {
-			Reload();
-		}
 	}
 	
 	public override void Shoot(int direction, string tag) {
 		if (!isReloading) {
 			if (Time.time - lastShootTime > shootTimeInterval) {
-				Debug.Log (spawnPoint.transform.position);
 				Vector3 spawnPosition = spawnPoint.transform.position;
 				Bullet firedBullet;
 				firedBullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);

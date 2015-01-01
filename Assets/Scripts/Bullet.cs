@@ -17,11 +17,8 @@ public class Bullet : MonoBehaviour {
 
 	void OnTriggerEnter(Collider collider) {
 		if (collider.tag == "Player") {
-			PlayerController playerController = collider.GetComponent<PlayerController>();
 			Destroy(this.gameObject);
-		} else if (collider.tag == "Enemy") {
-			Destroy(this.gameObject);
-		}
+		} 
 	}
 
 	void OnBecameInvisible() {

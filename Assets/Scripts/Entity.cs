@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Entity : MonoBehaviour {
 
-	protected static int health = 1;
+	protected int health = 1;
 
 	public virtual void TakeDamage(int damage) {
 	}

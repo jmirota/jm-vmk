@@ -8,7 +8,7 @@ public class EnemyController : Entity {
 	public GameObject gun;
 	public GameObject gunPlaceHolder;
 	private GameObject carriedGun;
-
+	public int gunType; // 0 - pistol, 1 - submachinegun, 2 - machinegun
 	private Vector3 spawnPoint;
 	public float walkAmplitude = 10;
 
@@ -25,10 +25,7 @@ public class EnemyController : Entity {
 	private Animator animator;
 	private GameManager manager;
 	private GunController gunController;
-
-	Camera cam;
-	Plane[] planes;
-
+	
 	// Use this for initialization
 	void Start () {
 		spawnPoint = transform.position;;
@@ -37,8 +34,11 @@ public class EnemyController : Entity {
 		gunController = gun.GetComponent<PistolController>();
 		gun.transform.position = gunPlaceHolder.transform.position;
 		carriedGun = Instantiate(gun, gunPlaceHolder.transform.position, Quaternion.Euler(new Vector3(0,-90,0))) as GameObject;
-		gunController = carriedGun.GetComponent<PistolController>();
+		LoadGunController();
 		carriedGun.transform.parent = this.gameObject.transform;
+		carriedGun.tag = "EnemyGun";
+		gunController.isPickUp = true;
+		manager = Camera.main.GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
@@ -79,7 +79,8 @@ public class EnemyController : Entity {
 			playerController.TakeDamage(1);
 			Destroy(this.gameObject);
 		} else if (collider.tag == "PlayerBullet") {
-			Destroy(this.gameObject);
+			Destroy(collider.gameObject);
+			TakeDamage(-1);
 		} else if (collider.tag == "Enemy" || collider.tag == "Obstacle") {
 			direction *= -1;
 		}
@@ -93,5 +94,29 @@ public class EnemyController : Entity {
 			current += acceleration * Time.deltaTime * direction;
 			return (direction == Mathf.Sign (targetSpeed - current)) ? current: target;
 		}
+	}
+	private void LoadGunController() {
+		if (gunType == 1) {
+			gunController = carriedGun.GetComponent<SubmachinegunController>();
+			health = 2;
+		} else if(gunType == 2) {
+			gunController = carriedGun.GetComponent<MachinegunController>();
+			health = 3;
+		} else {
+			gunController = carriedGun.GetComponent<PistolController>();
+			health = 1;
+		}
+	}
+
+	public override void TakeDamage(int damage) {
+		health--;
+		if (health <= 0) {
+			Die();
+		}
+	}
+	
+	public override void Die() {
+		manager.SpawnGun(gunType, transform.position);
+		Destroy(this.gameObject);
 	}
 }

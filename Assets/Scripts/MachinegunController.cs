@@ -13,27 +13,22 @@ public class MachinegunController : GunController {
 		shootTimeInterval = 1;
 		isReloading = false;
 	}
-	
-	void Update() {
-		if(isReloading) {
-			Reload();
-		}
-	}
-	
+
 	public override void Shoot(int direction, string tag) {
 		if (!isReloading) {
-			Vector3 spawnPosition = spawnPoint.transform.position;
-			Bullet firedBullet;
-			firedBullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);
-			firedBullet.Shoot(direction);
-			firedBullet.tag = tag;
-			ammunition--;
-			magazines = ammunition / magazineCapacity;
-			Debug.Log (ammunition);
-			if (ammunition % magazineCapacity == 0) {
-				isReloading = true;
-				startReloadingTime = Time.time;
-				Reload();
+			if (Time.time - lastShootTime > shootTimeInterval) {
+				Vector3 spawnPosition = spawnPoint.transform.position;
+				Bullet firedBullet;
+				firedBullet = (Instantiate(bullet, spawnPosition, Quaternion.identity) as Bullet);
+				firedBullet.Shoot(direction);
+				firedBullet.tag = tag;
+				ammunition--;
+				magazines = ammunition / magazineCapacity;
+				if (ammunition % magazineCapacity == 0) {
+					isReloading = true;
+					startReloadingTime = Time.time;
+					Reload();
+				}
 			}
 		}
 	}

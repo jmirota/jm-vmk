@@ -6,6 +6,7 @@ public class HUDCanvasController : MonoBehaviour {
 	public GameObject Live1;
 	public GameObject Live2;
 	public GameObject Live3;
+	public Text ammoText;
 
 	private int lives;
 	
@@ -22,6 +23,20 @@ public class HUDCanvasController : MonoBehaviour {
 		Live1.SetActive(live1Active);
 		Live2.SetActive(live2Active);
 		Live3.SetActive(live3Active);
+	}
+
+	public void SetAmmoText(int ammo, int magazines){
+		int allAmmo;
+
+		if(magazines == 0) {
+			allAmmo = ammo;
+		} else {
+			allAmmo = ammo*(magazines - 1) + ammo;
+		}
+		
+		Debug.Log(magazines);
+		string ammoInfo = magazines == -1 ? string.Format("{0}", ammo) : string.Format("{0}/{1}", ammo, allAmmo);
+		ammoText.text = ammoInfo;
 	}
 
 }
