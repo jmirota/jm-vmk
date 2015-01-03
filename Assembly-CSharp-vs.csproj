@@ -46,20 +46,30 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BoxGizmos.cs" />
-     <Compile Include="Assets\Scripts\Bullet.cs" />
-     <Compile Include="Assets\Scripts\EnemyController.cs" />
-     <Compile Include="Assets\Scripts\Entity.cs" />
-     <Compile Include="Assets\Scripts\FirstAid.cs" />
-     <Compile Include="Assets\Scripts\GameCamera.cs" />
-     <Compile Include="Assets\Scripts\GameManager.cs" />
-     <Compile Include="Assets\Scripts\GunController.cs" />
-     <Compile Include="Assets\Scripts\HUDCanvasController.cs" />
-     <Compile Include="Assets\Scripts\MachinegunController.cs" />
-     <Compile Include="Assets\Scripts\PistolController.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\PlayerPhysics.cs" />
-     <Compile Include="Assets\Scripts\SubmachinegunController.cs" />
+     <Compile Include="Assets\Scripts\Camera\BackgroundParallax.cs" />
+     <Compile Include="Assets\Scripts\Camera\GameCamera.cs" />
+     <Compile Include="Assets\Scripts\Constants\Directions.cs" />
+     <Compile Include="Assets\Scripts\Constants\GunsConstants.cs" />
+     <Compile Include="Assets\Scripts\Constants\Tags.cs" />
+     <Compile Include="Assets\Scripts\GameManager\GameManager.cs" />
+     <Compile Include="Assets\Scripts\GameOver\FinishController.cs" />
+     <Compile Include="Assets\Scripts\GameOver\GameOverController.cs" />
+     <Compile Include="Assets\Scripts\Guns\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Guns\Gun.cs" />
+     <Compile Include="Assets\Scripts\Guns\GunController.cs" />
+     <Compile Include="Assets\Scripts\HUDManagers\FinishHUDManagers.cs" />
+     <Compile Include="Assets\Scripts\HUDManagers\GameHUDManager.cs" />
+     <Compile Include="Assets\Scripts\HUDManagers\HUDCanvasController.cs" />
+     <Compile Include="Assets\Scripts\Humanoids\Enemies\EnemyController.cs" />
+     <Compile Include="Assets\Scripts\Humanoids\Entity.cs" />
+     <Compile Include="Assets\Scripts\Humanoids\Player\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Humanoids\Player\PlayerManager.cs" />
+     <Compile Include="Assets\Scripts\Humanoids\Player\PlayerPhysics.cs" />
+     <Compile Include="Assets\Scripts\LevelLoader\LoadLevelHudCanvasController.cs" />
+     <Compile Include="Assets\Scripts\Menu\MenuController.cs" />
+     <Compile Include="Assets\Scripts\Utils\BoxGizmos.cs" />
+     <Compile Include="Assets\Scripts\Utils\CameraViewPort.cs" />
+     <Compile Include="Assets\Scripts\Utils\FirstAid.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
